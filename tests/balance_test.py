@@ -7,20 +7,20 @@ CENT = D('.01')
 
 
 def compute(history):
-    balance = defaultdict(D)
+    results = defaultdict(lambda: {'balance': D(0), 'history': []})
 
     for day_values in history.get('contributions', {}).values():
         for name, value in day_values.items():
-            balance[name] += D(value).quantize(CENT)
+            results[name]['balance'] += D(value).quantize(CENT)
 
     for day_orsers in history.get('orders', {}).values():
         for order in day_orsers:
             per_eat = (D(order['price']) / D(order['qty'])).quantize(CENT)
             for day_eats in order['eat'].values():
                 for name, value in day_eats.items():
-                    balance[name] -= D(value) * per_eat
+                    results[name]['balance'] -= D(value) * per_eat
 
-    return dict(balance)
+    return dict(results)
 
 
 class BalanceTest(unittest.TestCase):
@@ -32,8 +32,8 @@ class BalanceTest(unittest.TestCase):
                 '2012-11-23': {'anton': 9.15},
             }
         }
-        balance = compute(history)
-        self.assertEqual(balance['anton'], D('22.15'))
+        results = compute(history)
+        self.assertEqual(results['anton']['balance'], D('22.15'))
 
     def test_compute_sum_of_consumptions(self):
         history = {
@@ -50,5 +50,5 @@ class BalanceTest(unittest.TestCase):
                 ],
             }
         }
-        balance = compute(history)
-        self.assertEqual(balance['anton'], D('-26.92'))
+        results = compute(history)
+        self.assertEqual(results['anton']['balance'], D('-26.92'))
