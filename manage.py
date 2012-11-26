@@ -5,9 +5,18 @@ import flask
 from flask.ext.script import Manager
 
 
+views = flask.Blueprint(__name__, 'views')
+
+
+@views.route('/')
+def home():
+    return flask.render_template('overview.html')
+
+
 def create_app():
     app = flask.Flask(__name__)
     app.debug = bool(os.environ.get('DEBUG'))
+    app.register_blueprint(views)
 
     @app.route('/crashme')
     def crashme():
