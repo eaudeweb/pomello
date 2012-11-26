@@ -1,5 +1,16 @@
 {% extends 'layout.html' %}
 
 {% block content %}
-hello world!
+
+  <h1>Balance</h1>
+
+  <table class="balance">
+  {% for name, info in results.items() %}
+    <tr>
+      <th>{{ name }}</th>
+      <td>{{ "{balance:.2f}"|py3format(**info) }}</td>
+    </tr>
+  {% endfor %}
+  </table>
+
 {% endblock %}
