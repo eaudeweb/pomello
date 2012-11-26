@@ -4,6 +4,25 @@ from decimal import Decimal as D
 
 class BalanceTest(unittest.TestCase):
 
+    def test_empty_history_returns_empty_result(self):
+        from balance import compute
+        results = compute({})
+        self.assertEqual(results, {})
+
+    def test_order_with_no_consumption_returns_empty_result(self):
+        from balance import compute
+        history = {
+            'orders': {
+                '2012-11-23': [
+                    {'price': 55,
+                     'qty': 10,
+                     'name': ''},
+                ],
+            },
+        }
+        results = compute(history)
+        self.assertEqual(results, {})
+
     def test_compute_sum_of_contributions(self):
         from balance import compute
         history = {

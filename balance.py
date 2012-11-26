@@ -22,7 +22,7 @@ def compute(history):
     for day_orsers in history.get('orders', {}).values():
         for order in day_orsers:
             per_eat = (D(order['price']) / D(order['qty'])).quantize(CENT)
-            for eat_date, day_eats in order['eat'].items():
+            for eat_date, day_eats in order.get('eat', {}).items():
                 for name, raw_value in day_eats.items():
                     value = - D(raw_value).quantize(CENT) * per_eat
                     entry = results[name]
