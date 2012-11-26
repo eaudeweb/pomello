@@ -29,7 +29,7 @@ def compute(history):
                     entry['balance'] += value
                     history_item = {
                         'value': value.quantize(CENT),
-                        'description': ('{order[name]} {eat_date}'
+                        'description': (u"{order[name]} {eat_date}"
                                         .format(**locals())),
                     }
                     entry['history'].append(history_item)
