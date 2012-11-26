@@ -42,10 +42,14 @@ def create_app():
 manager = Manager(create_app, with_default_commands=False)
 
 
-@manager.option('port', type=int)
-def runserver(port):
+@manager.option('listen')
+def runserver(listen):
+    if ':' in listen:
+        (host, port) = listen.split(':')
+    else:
+        (host, port) = ('127.0.0.1', listen)
     app = flask.current_app
-    app.run(port=port, use_reloader=app.debug)
+    app.run(host=host, port=int(port), use_reloader=app.debug)
 
 
 if __name__ == '__main__':
