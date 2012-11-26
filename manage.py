@@ -13,6 +13,11 @@ def home():
     return flask.render_template('overview.html')
 
 
+@views.app_template_filter('py3format')
+def py3format(spec, *args, **kwargs):
+    return spec.format(*args, **kwargs)
+
+
 def create_app():
     app = flask.Flask(__name__)
     app.debug = bool(os.environ.get('DEBUG'))
