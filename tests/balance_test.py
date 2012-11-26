@@ -23,6 +23,21 @@ class BalanceTest(unittest.TestCase):
         results = compute(history)
         self.assertEqual(results, {})
 
+    def test_trashed_key_is_skipped(self):
+        from balance import compute
+        history = {
+            'orders': {
+                '2012-11-23': [
+                    {'price': 55,
+                     'qty': 10,
+                     'name': '',
+                     'eat': {'trashed': 1}},
+                ],
+            },
+        }
+        results = compute(history)
+        self.assertEqual(results, {})
+
     def test_compute_sum_of_contributions(self):
         from balance import compute
         history = {
