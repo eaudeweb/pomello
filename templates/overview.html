@@ -7,7 +7,7 @@
   <table class="balance">
   {% for name, info in results.items() %}
     <tr>
-      <th>{{ name }}</th>
+      <th><a href="{{ url_for('.person', name=name) }}">{{ name }}</a></th>
       <td>{{ "{balance:.2f}"|py3format(**info) }}</td>
     </tr>
   {% endfor %}

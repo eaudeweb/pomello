@@ -16,6 +16,13 @@ def home():
     return flask.render_template('overview.html', results=results)
 
 
+@views.route('/person/<string:name>')
+def person(name):
+    return flask.render_template('person.html', **{
+        'name': name,
+    })
+
+
 @views.app_template_filter('py3format')
 def py3format(spec, *args, **kwargs):
     return spec.format(*args, **kwargs)
