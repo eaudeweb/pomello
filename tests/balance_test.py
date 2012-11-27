@@ -95,7 +95,34 @@ class BalanceTest(unittest.TestCase):
             {'description': 'input',
              'date': date(2012, 11, 23),
              'value': D('9.15')},
-            {'description': 'shrimps',
+            {'description': 'shrimps (x2)',
              'date': date(2012, 11, 25),
              'value': D('-21.42')},
+        ])
+
+    def test_compute_joins_history_items_from_same_order(self):
+        from balance import compute
+        history = {
+            'orders': {
+                date(2012, 11, 23): [
+                  {'price': 30,
+                   'qty': 3,
+                   'name': 'soup',
+                   'eat': {date(2012, 11, 25): {'anton': 1},
+                           date(2012, 11, 26): {'anton': 1}}},
+                  {'price': 75,
+                   'qty': 7,
+                   'name': 'shrimps',
+                    'eat': {date(2012, 11, 25): {'anton': 2}}},
+                ],
+            }
+        }
+        results = compute(history)
+        self.assertEqual(results['anton']['history'], [
+            {'description': 'soup + shrimps (x2)',
+             'date': date(2012, 11, 25),
+             'value': D('-31.42')},
+            {'description': 'soup',
+             'date': date(2012, 11, 26),
+             'value': D('-10.00')},
         ])

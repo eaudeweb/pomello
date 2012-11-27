@@ -27,21 +27,26 @@ def compute(history):
             entry['history'].append(history_item)
 
     for day_orsers in history.get('orders', {}).values():
+        consumption = defaultdict(list)
         for order in day_orsers:
             per_eat = (D(order['price']) / D(order['qty'])).quantize(CENT)
             for eat_date, day_eats in order.get('eat', {}).items():
                 if eat_date == 'trashed':
                     continue
-                for name, raw_value in day_eats.items():
-                    value = - D(raw_value).quantize(CENT) * per_eat
+                for name, pieces in day_eats.items():
+                    value = - pieces * per_eat
                     entry = results[name]
                     entry['balance'] += value
-                    history_item = {
-                        'value': value.quantize(CENT),
-                        'date': eat_date,
-                        'description': order['name'],
-                    }
-                    entry['history'].append(history_item)
+                    description = order['name']
+                    if pieces != 1:
+                        description += u" (x%s)" % pieces
+                    consumption[eat_date, name].append((description, value))
+        for ((eat_date, name), entries) in sorted(consumption.items()):
+            results[name]['history'].append({
+                'date': eat_date,
+                'value': sum(v for d, v in entries).quantize(CENT),
+                'description': u" + ".join(d for d, v in entries),
+            })
 
     for name in results:
         results[name]['balance'] = results[name]['balance'].quantize(CENT)
