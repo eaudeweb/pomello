@@ -14,7 +14,7 @@ def compute(history):
             value = D(raw_value).quantize(CENT)
             entry['balance'] += value
             history_item = {
-                'description': label,
+                'description': str(label),
                 'value': value.quantize(CENT),
             }
             entry['history'].append(history_item)

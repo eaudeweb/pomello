@@ -1,4 +1,5 @@
 import unittest
+from datetime import date
 from decimal import Decimal as D
 
 
@@ -13,7 +14,7 @@ class BalanceTest(unittest.TestCase):
         from balance import compute
         history = {
             'orders': {
-                '2012-11-23': [
+                date(2012, 11, 23): [
                     {'price': 55,
                      'qty': 10,
                      'name': ''},
@@ -27,7 +28,7 @@ class BalanceTest(unittest.TestCase):
         from balance import compute
         history = {
             'orders': {
-                '2012-11-23': [
+                date(2012, 11, 23): [
                     {'price': 55,
                      'qty': 10,
                      'name': '',
@@ -43,7 +44,7 @@ class BalanceTest(unittest.TestCase):
         history = {
             'contributions': {
                 'initial': {'anton': 13},
-                '2012-11-23': {'anton': 9.15},
+                date(2012, 11, 23): {'anton': 9.15},
             }
         }
         results = compute(history)
@@ -53,17 +54,17 @@ class BalanceTest(unittest.TestCase):
         from balance import compute
         history = {
             'orders': {
-                '2012-11-20': [
+                date(2012, 11, 20): [
                   {'price': 55,
                    'qty': 10,
                    'name': '',
-                    'eat': {'2012-11-20': {'anton': 1}}},
+                    'eat': {date(2012, 11, 20): {'anton': 1}}},
                 ],
-                '2012-11-23': [
+                date(2012, 11, 23): [
                   {'price': 75,
                    'qty': 7,
                    'name': '',
-                    'eat': {'2012-11-20': {'anton': 2}}},
+                    'eat': {date(2012, 11, 20): {'anton': 2}}},
                 ],
             }
         }
@@ -75,14 +76,14 @@ class BalanceTest(unittest.TestCase):
         history = {
             'contributions': {
                 'initial': {'anton': 13},
-                '2012-11-23': {'anton': 9.15},
+                date(2012, 11, 23): {'anton': 9.15},
             },
             'orders': {
-                '2012-11-23': [
+                date(2012, 11, 23): [
                   {'price': 75,
                    'qty': 7,
                    'name': 'shrimps',
-                    'eat': {'2012-11-25': {'anton': 2}}},
+                    'eat': {date(2012, 11, 25): {'anton': 2}}},
                 ],
             }
         }
