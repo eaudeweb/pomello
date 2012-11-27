@@ -4,4 +4,22 @@
 
   <h1>Person: {{ name }}</h1>
 
+  <table class="history">
+
+    <thead>
+      <th>Note</th>
+      <th>Value</th>
+    </thead>
+
+    <tbody>
+    {% for entry in history %}
+      <tr>
+        <td>{{ entry['description'] }}</td>
+        <td>{{ entry['value'] }}</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+
+  </table>
+
 {% endblock %}
