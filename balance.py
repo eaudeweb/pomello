@@ -13,11 +13,17 @@ def compute(history):
             entry = results[name]
             value = D(raw_value).quantize(CENT)
             entry['balance'] += value
-            history_item = {
-                'description': u"input {label}".format(**locals()),
-                'date': None if isinstance(label, basestring) else label,
-                'value': value.quantize(CENT),
-            }
+            if label == 'initial':
+                history_item = {
+                    'description': u"initial",
+                    'date': None,
+                }
+            else:
+                history_item = {
+                    'description': u"input",
+                    'date': label,
+                }
+            history_item['value'] = value.quantize(CENT)
             entry['history'].append(history_item)
 
     for day_orsers in history.get('orders', {}).values():
@@ -33,8 +39,7 @@ def compute(history):
                     history_item = {
                         'value': value.quantize(CENT),
                         'date': eat_date,
-                        'description': (u"{order[name]} {eat_date}"
-                                        .format(**locals())),
+                        'description': order['name'],
                     }
                     entry['history'].append(history_item)
 

@@ -89,13 +89,13 @@ class BalanceTest(unittest.TestCase):
         }
         results = compute(history)
         self.assertEqual(results['anton']['history'], [
-            {'description': 'input initial',
+            {'description': 'initial',
              'date': None,
              'value': D('13.00')},
-            {'description': 'input 2012-11-23',
+            {'description': 'input',
              'date': date(2012, 11, 23),
              'value': D('9.15')},
-            {'description': 'shrimps 2012-11-25',
+            {'description': 'shrimps',
              'date': date(2012, 11, 25),
              'value': D('-21.42')},
         ])
