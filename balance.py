@@ -14,7 +14,7 @@ def compute(history):
             value = D(raw_value).quantize(CENT)
             entry['balance'] += value
             history_item = {
-                'description': str(label),
+                'description': u"input {label}".format(**locals()),
                 'date': None if isinstance(label, basestring) else label,
                 'value': value.quantize(CENT),
             }
