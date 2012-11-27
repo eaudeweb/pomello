@@ -15,6 +15,7 @@ def compute(history):
             entry['balance'] += value
             history_item = {
                 'description': str(label),
+                'date': None if isinstance(label, basestring) else label,
                 'value': value.quantize(CENT),
             }
             entry['history'].append(history_item)
@@ -31,6 +32,7 @@ def compute(history):
                     entry['balance'] += value
                     history_item = {
                         'value': value.quantize(CENT),
+                        'date': eat_date,
                         'description': (u"{order[name]} {eat_date}"
                                         .format(**locals())),
                     }
