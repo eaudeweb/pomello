@@ -8,7 +8,7 @@
   {% for name, info in results.items() %}
     <tr>
       <th><a href="{{ url_for('.person', name=name) }}">{{ name }}</a></th>
-      <td>{{ info['balance'] }}</td>
+      <td>{{ info['balance']|money }}</td>
     </tr>
   {% endfor %}
   </table>

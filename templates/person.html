@@ -17,7 +17,7 @@
       <tr>
         <td>{{ entry['date'] }}</td>
         <td>{{ entry['description'] }}</td>
-        <td>{{ entry['value'] }}</td>
+        <td>{{ entry['value']|money }}</td>
       </tr>
     {% endfor %}
     </tbody>
