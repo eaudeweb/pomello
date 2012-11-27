@@ -43,4 +43,6 @@ def compute(history):
                     }
                     entry['history'].append(history_item)
 
+    for name in results:
+        results[name]['balance'] = results[name]['balance'].quantize(CENT)
     return dict(results)

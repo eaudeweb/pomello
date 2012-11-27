@@ -29,8 +29,3 @@ def person(name):
         'history': sorted(results[name]['history'],
                           key=lambda h: h['date'] or date(2000, 1, 1)),
     })
-
-
-@views.app_template_filter('py3format')
-def py3format(spec, *args, **kwargs):
-    return spec.format(*args, **kwargs)
