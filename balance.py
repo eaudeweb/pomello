@@ -26,13 +26,18 @@ def compute(history):
             history_item['value'] = value.quantize(CENT)
             entry['history'].append(history_item)
 
-    for day_orders in history.get('orders', {}).values():
+    for day_of_order, day_orders in history.get('orders', {}).items():
         consumption = defaultdict(list)
         for order in day_orders:
             order_type = order.get('type', 'food')
             if order_type == 'tip':
-                value = D(order['value']).quantize(CENT)
-                results['rulment']['balance'] =- value
+                value = -D(order['value']).quantize(CENT)
+                results['rulment']['balance'] += value
+                results['rulment']['history'].append({
+                    'date': day_of_order,
+                    'value': value,
+                    'description': u"tip",
+                })
                 continue
             per_eat = (D(order['price']) / D(order['qty'])).quantize(CENT)
             fee = (D(order.get('fee', 0)) * per_eat).quantize(CENT)

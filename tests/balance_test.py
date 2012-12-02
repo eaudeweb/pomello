@@ -171,3 +171,26 @@ class BalanceTest(unittest.TestCase):
         }
         results = compute(history)
         self.assertEqual(results['rulment']['balance'], D('-11.00'))
+
+    def test_regie_history_contains_additions_and_subtractions(self):
+        from balance import compute
+        history = {
+            'orders': {
+                date(2012, 11, 23): [
+                    {'price': 80,
+                     'qty': 10,
+                     'fee': 0.05,
+                     'name': '',
+                     'eat': {date(2012, 11, 25): {'anton': 2},
+                             'trashed': 2}},
+                    {'type': 'tip',
+                     'value': 2},
+                ],
+            },
+        }
+        results = compute(history)
+        self.assertEqual(results['rulment']['history'], [
+            {'description': u"tip",
+             'date': date(2012, 11, 23),
+             'value': D('-2.00')},
+        ])
