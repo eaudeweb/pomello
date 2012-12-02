@@ -24,21 +24,6 @@ class BalanceTest(unittest.TestCase):
         results = compute(history)
         self.assertEqual(results, {})
 
-    def test_trashed_key_is_skipped(self):
-        from balance import compute
-        history = {
-            'orders': {
-                date(2012, 11, 23): [
-                    {'price': 55,
-                     'qty': 10,
-                     'name': '',
-                     'eat': {'trashed': 1}},
-                ],
-            },
-        }
-        results = compute(history)
-        self.assertEqual(results, {})
-
     def test_compute_sum_of_contributions(self):
         from balance import compute
         history = {
@@ -171,3 +156,18 @@ class BalanceTest(unittest.TestCase):
         }
         results = compute(history)
         self.assertEqual(results['rulment']['balance'], D('-2.00'))
+
+    def test_losses_are_deduced_from_regie(self):
+        from balance import compute
+        history = {
+            'orders': {
+                date(2012, 11, 23): [
+                    {'price': 55,
+                     'qty': 10,
+                     'name': '',
+                     'eat': {'trashed': 2}},
+                ],
+            },
+        }
+        results = compute(history)
+        self.assertEqual(results['rulment']['balance'], D('-11.00'))

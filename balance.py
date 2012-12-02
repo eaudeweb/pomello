@@ -38,6 +38,8 @@ def compute(history):
             fee = (D(order.get('fee', 0)) * per_eat).quantize(CENT)
             for eat_date, day_eats in order.get('eat', {}).items():
                 if eat_date == 'trashed':
+                    value = day_eats * per_eat
+                    results['rulment']['balance'] =- value
                     continue
                 for name, pieces in day_eats.items():
                     value = - pieces * (per_eat + fee)
