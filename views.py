@@ -18,13 +18,13 @@ def _get_balance():
 
 @views.route('/')
 def home():
-    results = _get_balance()
+    results = _get_balance()['results']
     return flask.render_template('overview.html', results=results)
 
 
 @views.route('/person/<string:name>')
 def person(name):
-    results = _get_balance()
+    results = _get_balance()['results']
     return flask.render_template('person.html', **{
         'name': name,
         'history': sorted(results[name]['history'],

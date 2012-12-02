@@ -78,4 +78,6 @@ def compute(history):
         results[name]['balance'] = results[name]['balance'].quantize(CENT)
     rulment_history = results.get('rulment', {}).get('history', [])
     rulment_history.sort(key=lambda e: (e['date'], e['description']))
-    return dict(results)
+    return {
+        'results': dict(results),
+    }

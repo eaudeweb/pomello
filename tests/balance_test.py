@@ -7,7 +7,7 @@ class BalanceTest(unittest.TestCase):
 
     def test_empty_history_returns_empty_result(self):
         from balance import compute
-        results = compute({})
+        results = compute({})['results']
         self.assertEqual(results, {})
 
     def test_order_with_no_consumption_returns_empty_result(self):
@@ -21,7 +21,7 @@ class BalanceTest(unittest.TestCase):
                 ],
             },
         }
-        results = compute(history)
+        results = compute(history)['results']
         self.assertEqual(results, {})
 
     def test_compute_sum_of_contributions(self):
@@ -32,7 +32,7 @@ class BalanceTest(unittest.TestCase):
                 date(2012, 11, 23): {'anton': 9.15},
             }
         }
-        results = compute(history)
+        results = compute(history)['results']
         self.assertEqual(results['anton']['balance'], D('22.15'))
 
     def test_compute_sum_of_consumptions(self):
@@ -53,7 +53,7 @@ class BalanceTest(unittest.TestCase):
                 ],
             }
         }
-        results = compute(history)
+        results = compute(history)['results']
         self.assertEqual(results['anton']['balance'], D('-26.92'))
 
     def test_compute_saves_personal_history_entries(self):
@@ -72,7 +72,7 @@ class BalanceTest(unittest.TestCase):
                 ],
             }
         }
-        results = compute(history)
+        results = compute(history)['results']
         self.assertEqual(results['anton']['history'], [
             {'description': 'initial',
              'date': None,
@@ -102,7 +102,7 @@ class BalanceTest(unittest.TestCase):
                 ],
             }
         }
-        results = compute(history)
+        results = compute(history)['results']
         self.assertEqual(results['anton']['history'], [
             {'description': 'soup + shrimps (x2)',
              'date': date(2012, 11, 25),
@@ -125,7 +125,7 @@ class BalanceTest(unittest.TestCase):
                 ],
             },
         }
-        results = compute(history)
+        results = compute(history)['results']
         self.assertEqual(results['anton']['balance'], D('-8.40'))
 
     def test_fee_total_is_increased_with_contribution(self):
@@ -141,7 +141,7 @@ class BalanceTest(unittest.TestCase):
                 ],
             },
         }
-        results = compute(history)
+        results = compute(history)['results']
         self.assertEqual(results['rulment']['balance'], D('0.80'))
 
     def test_tip_is_deduced_from_rulment(self):
@@ -154,7 +154,7 @@ class BalanceTest(unittest.TestCase):
                 ],
             },
         }
-        results = compute(history)
+        results = compute(history)['results']
         self.assertEqual(results['rulment']['balance'], D('-2.00'))
 
     def test_losses_are_deduced_from_regie(self):
@@ -169,7 +169,7 @@ class BalanceTest(unittest.TestCase):
                 ],
             },
         }
-        results = compute(history)
+        results = compute(history)['results']
         self.assertEqual(results['rulment']['balance'], D('-11.00'))
 
     def test_regie_history_contains_additions_and_subtractions(self):
@@ -188,7 +188,7 @@ class BalanceTest(unittest.TestCase):
                 ],
             },
         }
-        results = compute(history)
+        results = compute(history)['results']
         self.assertEqual(results['rulment']['history'], [
             {'description': u"tip",
              'date': date(2012, 11, 23),
