@@ -126,3 +126,19 @@ class BalanceTest(unittest.TestCase):
              'date': date(2012, 11, 26),
              'value': D('-10.00')},
         ])
+
+    def test_fee_is_added_to_spending(self):
+        from balance import compute
+        history = {
+            'orders': {
+                date(2012, 11, 23): [
+                    {'price': 80,
+                     'qty': 10,
+                     'fee': 0.05,
+                     'name': '',
+                     'eat': {date(2012, 11, 25): {'anton': 1}}},
+                ],
+            },
+        }
+        results = compute(history)
+        self.assertEqual(results['anton']['balance'], D('-8.40'))
