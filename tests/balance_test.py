@@ -162,8 +162,8 @@ class BalanceTest(unittest.TestCase):
         history = {
             'orders': {
                 date(2012, 11, 23): [
-                    {'price': 55,
-                     'qty': 10,
+                    {'price': 11,
+                     'qty': 2,
                      'name': '',
                      'eat': {'trashed': 2}},
                 ],
@@ -177,8 +177,8 @@ class BalanceTest(unittest.TestCase):
         history = {
             'orders': {
                 date(2012, 11, 23): [
-                    {'price': 80,
-                     'qty': 10,
+                    {'price': 32,
+                     'qty': 4,
                      'fee': 0.05,
                      'name': '',
                      'eat': {date(2012, 11, 25): {'anton': 2},
@@ -220,3 +220,22 @@ class BalanceTest(unittest.TestCase):
              'name': 'shrimps',
              'qty': 8},
         ])
+
+    def test_complain_if_comsumption_does_not_add_up(self):
+        from balance import compute
+        history = {
+            'orders': {
+                date(2012, 11, 23): [
+                    {'price': 80,
+                     'qty': 10,
+                     'fee': 0.05,
+                     'name': 'shrimps',
+                     'eat': {date(2012, 11, 25): {'anton': 2},
+                             'trashed': 3}},
+                ],
+            },
+        }
+        with self.assertRaises(ValueError) as e:
+            compute(history)
+        self.assertEqual("'shrimps' does not add up: delta=5",
+                         e.exception.message)

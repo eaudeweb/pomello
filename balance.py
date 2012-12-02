@@ -57,6 +57,7 @@ def compute(history):
                         'value': value,
                         'description': u"trashed",
                     })
+                    order_remaining['closed'] = day_eats
                     continue
                 for name, pieces in day_eats.items():
                     value = - pieces * (per_eat + fee)
@@ -86,6 +87,13 @@ def compute(history):
         results[name]['balance'] = results[name]['balance'].quantize(CENT)
     rulment_history = results.get('rulment', {}).get('history', [])
     rulment_history.sort(key=lambda e: (e['date'], e['description']))
+
+    for item in remaining:
+        if 'closed' in item:
+            delta = item['qty'] - item['closed']
+            if delta != 0:
+                raise ValueError("%r does not add up: delta=%r"
+                                 % (item['name'], delta))
 
     return {
         'results': dict(results),
