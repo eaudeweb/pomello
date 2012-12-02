@@ -1,17 +1,15 @@
+import os
 import flask
 from datetime import date
-from path import path
 import yaml
 import jinja2
 import balance
-
-HISTORY_DIR = path(__file__).abspath().parent / 'history'
 
 views = flask.Blueprint(__name__, 'views')
 
 
 def _get_balance():
-    with (HISTORY_DIR / '2012-11.yaml').open('rb') as f:
+    with open(os.environ['HISTORY_FILE'], 'rb') as f:
         history = yaml.load(f)
     return balance.compute(history)
 
