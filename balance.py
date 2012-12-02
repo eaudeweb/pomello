@@ -7,6 +7,7 @@ CENT = D('.01')
 
 def compute(history):
     results = defaultdict(lambda: {'balance': D(0), 'history': []})
+    remaining = []
 
     for label, day_values in history.get('contributions', {}).items():
         for name, raw_value in day_values.items():
@@ -39,6 +40,12 @@ def compute(history):
                     'description': u"tip",
                 })
                 continue
+            order_remaining = {
+                'date': day_of_order,
+                'name': order['name'],
+                'qty': order['qty'],
+            }
+            remaining.append(order_remaining)
             per_eat = (D(order['price']) / D(order['qty'])).quantize(CENT)
             fee = (D(order.get('fee', 0)) * per_eat).quantize(CENT)
             for eat_date, day_eats in order.get('eat', {}).items():
@@ -67,6 +74,7 @@ def compute(history):
                     if pieces != 1:
                         description += u" (x%s)" % pieces
                     consumption[eat_date, name].append((description, value))
+                    order_remaining['qty'] -= pieces
         for ((eat_date, name), entries) in sorted(consumption.items()):
             results[name]['history'].append({
                 'date': eat_date,
@@ -78,6 +86,8 @@ def compute(history):
         results[name]['balance'] = results[name]['balance'].quantize(CENT)
     rulment_history = results.get('rulment', {}).get('history', [])
     rulment_history.sort(key=lambda e: (e['date'], e['description']))
+
     return {
         'results': dict(results),
+        'remaining': remaining,
     }

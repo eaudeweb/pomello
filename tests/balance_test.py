@@ -200,3 +200,23 @@ class BalanceTest(unittest.TestCase):
              'date': date(2012, 11, 25),
              'value': D('0.80')},
         ])
+
+    def test_count_of_uneaten_food(self):
+        from balance import compute
+        history = {
+            'orders': {
+                date(2012, 11, 23): [
+                    {'price': 80,
+                     'qty': 10,
+                     'fee': 0.05,
+                     'name': 'shrimps',
+                     'eat': {date(2012, 11, 25): {'anton': 2}}},
+                ],
+            },
+        }
+        remaining = compute(history)['remaining']
+        self.assertEqual(remaining, [
+            {'date': date(2012, 11, 23),
+             'name': 'shrimps',
+             'qty': 8},
+        ])
