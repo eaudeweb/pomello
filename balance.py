@@ -54,7 +54,13 @@ def compute(history):
                 for name, pieces in day_eats.items():
                     value = - pieces * (per_eat + fee)
                     if fee:
-                        results['rulment']['balance'] += pieces * fee
+                        fee_value = pieces * fee
+                        results['rulment']['balance'] += fee_value
+                        results['rulment']['history'].append({
+                            'date': eat_date,
+                            'value': fee_value,
+                            'description': u"contribution " + name,
+                        })
                     entry = results[name]
                     entry['balance'] += value
                     description = order['name']
