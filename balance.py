@@ -29,14 +29,15 @@ def compute(history):
     for day_orsers in history.get('orders', {}).values():
         consumption = defaultdict(list)
         for order in day_orsers:
-            per_eat = (D(order['price']) / D(order['qty']))
-            per_eat *= D(1 + order.get('fee', 0))
-            per_eat = per_eat.quantize(CENT)
+            per_eat = (D(order['price']) / D(order['qty'])).quantize(CENT)
+            fee = (D(order.get('fee', 0)) * per_eat).quantize(CENT)
             for eat_date, day_eats in order.get('eat', {}).items():
                 if eat_date == 'trashed':
                     continue
                 for name, pieces in day_eats.items():
-                    value = - pieces * per_eat
+                    value = - pieces * (per_eat + fee)
+                    if fee:
+                        results['rulment']['balance'] += pieces * fee
                     entry = results[name]
                     entry['balance'] += value
                     description = order['name']

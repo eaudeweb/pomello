@@ -142,3 +142,19 @@ class BalanceTest(unittest.TestCase):
         }
         results = compute(history)
         self.assertEqual(results['anton']['balance'], D('-8.40'))
+
+    def test_fee_total_is_increased_with_contribution(self):
+        from balance import compute
+        history = {
+            'orders': {
+                date(2012, 11, 23): [
+                    {'price': 80,
+                     'qty': 10,
+                     'fee': 0.05,
+                     'name': '',
+                     'eat': {date(2012, 11, 25): {'anton': 2}}},
+                ],
+            },
+        }
+        results = compute(history)
+        self.assertEqual(results['rulment']['balance'], D('0.80'))
