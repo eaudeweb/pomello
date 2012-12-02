@@ -193,4 +193,7 @@ class BalanceTest(unittest.TestCase):
             {'description': u"tip",
              'date': date(2012, 11, 23),
              'value': D('-2.00')},
+            {'description': u"trashed",
+             'date': date(2012, 11, 23),
+             'value': D('-16.00')},
         ])
