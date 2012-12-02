@@ -13,6 +13,7 @@
     </thead>
 
     <tbody>
+
     {% for entry in history %}
       <tr>
         <td>{{ entry['date'] }}</td>
@@ -20,6 +21,13 @@
         <td>{{ entry['value']|money }}</td>
       </tr>
     {% endfor %}
+
+    <tr class="total">
+      <td>Total</td>
+      <td></td>
+      <td>{{ history|sum(attribute='value')|money }}</td>
+    </tr>
+
     </tbody>
 
   </table>
