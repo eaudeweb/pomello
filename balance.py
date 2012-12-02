@@ -29,6 +29,11 @@ def compute(history):
     for day_orsers in history.get('orders', {}).values():
         consumption = defaultdict(list)
         for order in day_orsers:
+            order_type = order.get('type', 'food')
+            if order_type == 'tip':
+                value = D(order['value']).quantize(CENT)
+                results['rulment']['balance'] =- value
+                continue
             per_eat = (D(order['price']) / D(order['qty'])).quantize(CENT)
             fee = (D(order.get('fee', 0)) * per_eat).quantize(CENT)
             for eat_date, day_eats in order.get('eat', {}).items():

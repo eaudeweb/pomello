@@ -158,3 +158,16 @@ class BalanceTest(unittest.TestCase):
         }
         results = compute(history)
         self.assertEqual(results['rulment']['balance'], D('0.80'))
+
+    def test_tip_is_deduced_from_rulment(self):
+        from balance import compute
+        history = {
+            'orders': {
+                date(2012, 11, 23): [
+                    {'type': 'tip',
+                     'value': 2},
+                ],
+            },
+        }
+        results = compute(history)
+        self.assertEqual(results['rulment']['balance'], D('-2.00'))
