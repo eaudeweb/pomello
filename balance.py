@@ -26,9 +26,9 @@ def compute(history):
             history_item['value'] = value.quantize(CENT)
             entry['history'].append(history_item)
 
-    for day_orsers in history.get('orders', {}).values():
+    for day_orders in history.get('orders', {}).values():
         consumption = defaultdict(list)
-        for order in day_orsers:
+        for order in day_orders:
             order_type = order.get('type', 'food')
             if order_type == 'tip':
                 value = D(order['value']).quantize(CENT)
