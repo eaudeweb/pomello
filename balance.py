@@ -8,24 +8,21 @@ QUANT = D('.01')
 class Account(object):
 
     def __init__(self):
-        self._history = []
+        self.history = []
 
     def add(self, date, value, description):
-        self._history.append({
+        self.history.append({
             'date': date,
             'value': value,
             'description': description,
         })
 
     def balance(self):
-        return sum(i['value'] for i in self._history)
+        return sum(i['value'] for i in self.history)
 
 
 def compute(history):
-    def new_entry():
-        account = Account()
-        return {'account': account, 'history': account._history}
-    results = defaultdict(new_entry)
+    results = defaultdict(lambda: {'account': Account()})
     remaining = []
 
     for label, day_values in history.get('contributions', {}).items():
@@ -102,7 +99,8 @@ def compute(history):
         entry = results[name]
         value = entry['account'].balance()
         entry['balance'] = value.quantize(QUANT)
-    rulment_history = results.get('rulment', {}).get('history', [])
+    rulment_history = (results['rulment']['account'].history
+                       if 'rulment' in results else [])
     rulment_history.sort(key=lambda e: (e['date'], e['description']))
 
     uneaten = D('0')

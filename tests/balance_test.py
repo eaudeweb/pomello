@@ -73,7 +73,7 @@ class BalanceTest(unittest.TestCase):
             }
         }
         results = compute(history)['results']
-        self.assertEqual(results['anton']['history'], [
+        self.assertEqual(results['anton']['account'].history, [
             {'description': 'initial',
              'date': None,
              'value': D('13.00')},
@@ -103,7 +103,7 @@ class BalanceTest(unittest.TestCase):
             }
         }
         results = compute(history)['results']
-        self.assertEqual(results['anton']['history'], [
+        self.assertEqual(results['anton']['account'].history, [
             {'description': 'soup + shrimps (x2)',
              'date': date(2012, 11, 25),
              'value': D('-31.42')},
@@ -189,7 +189,7 @@ class BalanceTest(unittest.TestCase):
             },
         }
         results = compute(history)['results']
-        self.assertEqual(results['rulment']['history'], [
+        self.assertEqual(results['rulment']['account'].history, [
             {'description': u"tip",
              'date': date(2012, 11, 23),
              'value': D('-2.00')},
