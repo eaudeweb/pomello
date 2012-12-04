@@ -25,7 +25,7 @@ def person(name):
     results = _get_balance()['results']
     return flask.render_template('person.html', **{
         'name': name,
-        'history': sorted(results[name]['account'].history,
+        'history': sorted(results[name].history,
                           key=lambda h: h['date'] or date(2000, 1, 1)),
     })
 
