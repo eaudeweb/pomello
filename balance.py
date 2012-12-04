@@ -97,7 +97,7 @@ def compute(history):
     for name in results:
         entry = results[name]
         value = entry['account'].balance()
-        entry['balance'] = value.quantize(QUANT)
+        entry['balance'] = value
     rulment_history = (results['rulment']['account'].history
                        if 'rulment' in results else [])
     rulment_history.sort(key=lambda e: (e['date'], e['description']))
