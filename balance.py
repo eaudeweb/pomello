@@ -40,13 +40,14 @@ def compute(history):
                     'description': u"tip",
                 })
                 continue
+            per_eat = (D(order['price']) / D(order['qty'])).quantize(CENT)
             order_remaining = {
                 'date': day_of_order,
                 'name': order['name'],
                 'qty': order['qty'],
+                'per_eat': per_eat,
             }
             remaining.append(order_remaining)
-            per_eat = (D(order['price']) / D(order['qty'])).quantize(CENT)
             fee = (D(order.get('fee', 0)) * per_eat).quantize(CENT)
             for eat_date, day_eats in order.get('eat', {}).items():
                 if eat_date == 'trashed':
@@ -88,14 +89,18 @@ def compute(history):
     rulment_history = results.get('rulment', {}).get('history', [])
     rulment_history.sort(key=lambda e: (e['date'], e['description']))
 
+    uneaten = D('0')
     for item in remaining:
         if 'closed' in item:
             delta = item['qty'] - item['closed']
             if delta != 0:
                 raise ValueError("%r does not add up: delta=%r"
                                  % (item['name'], delta))
+        else:
+            uneaten -= item['qty'] * item['per_eat']
+
+    results['uneaten'] = {'balance': uneaten}
 
     return {
         'results': dict(results),
-        'remaining': remaining,
     }

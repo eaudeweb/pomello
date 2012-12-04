@@ -8,7 +8,7 @@ class BalanceTest(unittest.TestCase):
     def test_empty_history_returns_empty_result(self):
         from balance import compute
         results = compute({})['results']
-        self.assertEqual(results, {})
+        self.assertEqual(results.keys(), ['uneaten'])
 
     def test_order_with_no_consumption_returns_empty_result(self):
         from balance import compute
@@ -22,7 +22,7 @@ class BalanceTest(unittest.TestCase):
             },
         }
         results = compute(history)['results']
-        self.assertEqual(results, {})
+        self.assertEqual(results.keys(), ['uneaten'])
 
     def test_compute_sum_of_contributions(self):
         from balance import compute
@@ -201,26 +201,6 @@ class BalanceTest(unittest.TestCase):
              'value': D('0.80')},
         ])
 
-    def test_count_of_uneaten_food(self):
-        from balance import compute
-        history = {
-            'orders': {
-                date(2012, 11, 23): [
-                    {'price': 80,
-                     'qty': 10,
-                     'fee': 0.05,
-                     'name': 'shrimps',
-                     'eat': {date(2012, 11, 25): {'anton': 2}}},
-                ],
-            },
-        }
-        remaining = compute(history)['remaining']
-        self.assertEqual(remaining, [
-            {'date': date(2012, 11, 23),
-             'name': 'shrimps',
-             'qty': 8},
-        ])
-
     def test_complain_if_comsumption_does_not_add_up(self):
         from balance import compute
         history = {
@@ -239,3 +219,19 @@ class BalanceTest(unittest.TestCase):
             compute(history)
         self.assertEqual("'shrimps' does not add up: delta=5",
                          e.exception.message)
+
+    def test_computes_sum_of_uneaten_food(self):
+        from balance import compute
+        history = {
+            'orders': {
+                date(2012, 11, 23): [
+                    {'price': 80,
+                     'qty': 10,
+                     'fee': 0.05,
+                     'name': 'shrimps',
+                     'eat': {date(2012, 11, 25): {'anton': 2}}},
+                ],
+            },
+        }
+        results = compute(history)['results']
+        self.assertEqual(results['uneaten']['balance'], D('-64.00'))
