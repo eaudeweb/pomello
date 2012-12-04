@@ -5,8 +5,20 @@ from collections import defaultdict
 QUANT = D('.01')
 
 
+class Account(object):
+
+    def __init__(self):
+        self._history = []
+
+    def balance(self):
+        return sum(i['value'] for i in self._history)
+
+
 def compute(history):
-    results = defaultdict(lambda: {'history': []})
+    def new_entry():
+        account = Account()
+        return {'account': account, 'history': account._history}
+    results = defaultdict(new_entry)
     remaining = []
 
     for label, day_values in history.get('contributions', {}).items():
@@ -81,7 +93,7 @@ def compute(history):
 
     for name in results:
         entry = results[name]
-        value = sum(i['value'] for i in entry['history'])
+        value = entry['account'].balance()
         entry['balance'] = value.quantize(QUANT)
     rulment_history = results.get('rulment', {}).get('history', [])
     rulment_history.sort(key=lambda e: (e['date'], e['description']))
