@@ -17,6 +17,7 @@ class Account(object):
             'description': description,
         })
 
+    @property
     def balance(self):
         return sum(i['value'] for i in self.history)
 
