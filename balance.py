@@ -23,12 +23,11 @@ class Account(object):
 
 
 def compute(history):
-    results = defaultdict(Account)
+    accounts = defaultdict(Account)
     remaining = []
 
     for label, day_values in history.get('contributions', {}).items():
         for name, raw_value in day_values.items():
-            entry = results[name]
             value = D(raw_value).quantize(QUANT)
             if label == 'initial':
                 history_item = {
@@ -41,7 +40,7 @@ def compute(history):
                     'date': label,
                 }
             history_item['value'] = value.quantize(QUANT)
-            entry.add(**history_item)
+            accounts[name].add(**history_item)
 
     for day_of_order, day_orders in history.get('orders', {}).items():
         consumption = defaultdict(list)
@@ -49,7 +48,7 @@ def compute(history):
             order_type = order.get('type', 'food')
             if order_type == 'tip':
                 value = -D(order['value']).quantize(QUANT)
-                results['rulment'].add(**{
+                accounts['rulment'].add(**{
                     'date': day_of_order,
                     'value': value,
                     'description': u"tip",
@@ -67,7 +66,7 @@ def compute(history):
             for eat_date, day_eats in order.get('eat', {}).items():
                 if eat_date == 'trashed':
                     value = -day_eats * per_eat
-                    results['rulment'].add(**{
+                    accounts['rulment'].add(**{
                         'date': day_of_order,
                         'value': value,
                         'description': u"trashed",
@@ -78,7 +77,7 @@ def compute(history):
                     value = - pieces * (per_eat + fee)
                     if fee:
                         fee_value = pieces * fee
-                        results['rulment'].add(**{
+                        accounts['rulment'].add(**{
                             'date': eat_date,
                             'value': fee_value,
                             'description': u"contribution " + name,
@@ -89,14 +88,14 @@ def compute(history):
                     consumption[eat_date, name].append((description, value))
                     order_remaining['qty'] -= pieces
         for ((eat_date, name), entries) in sorted(consumption.items()):
-            results[name].add(**{
+            accounts[name].add(**{
                 'date': eat_date,
                 'value': sum(v for d, v in entries).quantize(QUANT),
                 'description': u" + ".join(d for d, v in entries),
             })
 
-    rulment_history = (results['rulment'].history
-                       if 'rulment' in results else [])
+    rulment_history = (accounts['rulment'].history
+                       if 'rulment' in accounts else [])
     rulment_history.sort(key=lambda e: (e['date'], e['description']))
 
     uneaten = D('0')
@@ -109,9 +108,9 @@ def compute(history):
         else:
             uneaten -= item['qty'] * item['per_eat']
 
-    results['uneaten'] = Account()
-    results['uneaten'].add(None, uneaten, "uneaten")
+    accounts['uneaten'] = Account()
+    accounts['uneaten'].add(None, uneaten, "uneaten")
 
     return {
-        'results': dict(results),
+        'results': dict(accounts),
     }
