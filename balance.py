@@ -2,7 +2,7 @@ from decimal import Decimal as D
 from collections import defaultdict
 
 
-CENT = D('.01')
+QUANT = D('.01')
 
 
 def compute(history):
@@ -12,7 +12,7 @@ def compute(history):
     for label, day_values in history.get('contributions', {}).items():
         for name, raw_value in day_values.items():
             entry = results[name]
-            value = D(raw_value).quantize(CENT)
+            value = D(raw_value).quantize(QUANT)
             entry['balance'] += value
             if label == 'initial':
                 history_item = {
@@ -24,7 +24,7 @@ def compute(history):
                     'description': u"input",
                     'date': label,
                 }
-            history_item['value'] = value.quantize(CENT)
+            history_item['value'] = value.quantize(QUANT)
             entry['history'].append(history_item)
 
     for day_of_order, day_orders in history.get('orders', {}).items():
@@ -32,7 +32,7 @@ def compute(history):
         for order in day_orders:
             order_type = order.get('type', 'food')
             if order_type == 'tip':
-                value = -D(order['value']).quantize(CENT)
+                value = -D(order['value']).quantize(QUANT)
                 results['rulment']['balance'] += value
                 results['rulment']['history'].append({
                     'date': day_of_order,
@@ -40,7 +40,7 @@ def compute(history):
                     'description': u"tip",
                 })
                 continue
-            per_eat = (D(order['price']) / D(order['qty'])).quantize(CENT)
+            per_eat = (D(order['price']) / D(order['qty'])).quantize(QUANT)
             order_remaining = {
                 'date': day_of_order,
                 'name': order['name'],
@@ -48,7 +48,7 @@ def compute(history):
                 'per_eat': per_eat,
             }
             remaining.append(order_remaining)
-            fee = (D(order.get('fee', 0)) * per_eat).quantize(CENT)
+            fee = (D(order.get('fee', 0)) * per_eat).quantize(QUANT)
             for eat_date, day_eats in order.get('eat', {}).items():
                 if eat_date == 'trashed':
                     value = -day_eats * per_eat
@@ -80,12 +80,12 @@ def compute(history):
         for ((eat_date, name), entries) in sorted(consumption.items()):
             results[name]['history'].append({
                 'date': eat_date,
-                'value': sum(v for d, v in entries).quantize(CENT),
+                'value': sum(v for d, v in entries).quantize(QUANT),
                 'description': u" + ".join(d for d, v in entries),
             })
 
     for name in results:
-        results[name]['balance'] = results[name]['balance'].quantize(CENT)
+        results[name]['balance'] = results[name]['balance'].quantize(QUANT)
     rulment_history = results.get('rulment', {}).get('history', [])
     rulment_history.sort(key=lambda e: (e['date'], e['description']))
 
