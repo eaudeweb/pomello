@@ -6,14 +6,13 @@ QUANT = D('.01')
 
 
 def compute(history):
-    results = defaultdict(lambda: {'balance': D(0), 'history': []})
+    results = defaultdict(lambda: {'history': []})
     remaining = []
 
     for label, day_values in history.get('contributions', {}).items():
         for name, raw_value in day_values.items():
             entry = results[name]
             value = D(raw_value).quantize(QUANT)
-            entry['balance'] += value
             if label == 'initial':
                 history_item = {
                     'description': u"initial",
@@ -33,7 +32,6 @@ def compute(history):
             order_type = order.get('type', 'food')
             if order_type == 'tip':
                 value = -D(order['value']).quantize(QUANT)
-                results['rulment']['balance'] += value
                 results['rulment']['history'].append({
                     'date': day_of_order,
                     'value': value,
@@ -52,7 +50,6 @@ def compute(history):
             for eat_date, day_eats in order.get('eat', {}).items():
                 if eat_date == 'trashed':
                     value = -day_eats * per_eat
-                    results['rulment']['balance'] += value
                     results['rulment']['history'].append({
                         'date': day_of_order,
                         'value': value,
@@ -64,14 +61,12 @@ def compute(history):
                     value = - pieces * (per_eat + fee)
                     if fee:
                         fee_value = pieces * fee
-                        results['rulment']['balance'] += fee_value
                         results['rulment']['history'].append({
                             'date': eat_date,
                             'value': fee_value,
                             'description': u"contribution " + name,
                         })
                     entry = results[name]
-                    entry['balance'] += value
                     description = order['name']
                     if pieces != 1:
                         description += u" (x%s)" % pieces
@@ -85,7 +80,9 @@ def compute(history):
             })
 
     for name in results:
-        results[name]['balance'] = results[name]['balance'].quantize(QUANT)
+        entry = results[name]
+        value = sum(i['value'] for i in entry['history'])
+        entry['balance'] = value.quantize(QUANT)
     rulment_history = results.get('rulment', {}).get('history', [])
     rulment_history.sort(key=lambda e: (e['date'], e['description']))
 
