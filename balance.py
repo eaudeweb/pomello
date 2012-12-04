@@ -112,5 +112,5 @@ def compute(history):
     accounts['uneaten'].add(None, uneaten, "uneaten")
 
     return {
-        'results': dict(accounts),
+        'accounts': dict(accounts),
     }

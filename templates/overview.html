@@ -6,7 +6,7 @@
 
   <table class="balance">
 
-  {% for name, info in results.items() %}
+  {% for name, info in accounts.items() %}
     <tr>
       <th><a href="{{ url_for('.person', name=name) }}">{{ name }}</a></th>
       <td>{{ info.balance|money }}</td>
@@ -15,7 +15,7 @@
 
   <tr class="total">
     <th>total</th>
-    <td>{{ results.values()|sum(attribute='balance')|money }}</td>
+    <td>{{ accounts.values()|sum(attribute='balance')|money }}</td>
   </tr>
 
   </table>

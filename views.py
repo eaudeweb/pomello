@@ -16,16 +16,16 @@ def _get_balance():
 
 @views.route('/')
 def home():
-    results = _get_balance()['results']
-    return flask.render_template('overview.html', results=results)
+    accounts = _get_balance()['accounts']
+    return flask.render_template('overview.html', accounts=accounts)
 
 
 @views.route('/person/<string:name>')
 def person(name):
-    results = _get_balance()['results']
+    accounts = _get_balance()['accounts']
     return flask.render_template('person.html', **{
         'name': name,
-        'history': sorted(results[name].history,
+        'history': sorted(accounts[name].history,
                           key=lambda h: h['date'] or date(2000, 1, 1)),
     })
 
