@@ -82,7 +82,6 @@ def compute(history):
                             'value': fee_value,
                             'description': u"contribution " + name,
                         })
-                    entry = results[name]
                     description = order['name']
                     if pieces != 1:
                         description += u" (x%s)" % pieces
