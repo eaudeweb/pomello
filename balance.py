@@ -94,10 +94,6 @@ def compute(history):
                 'description': u" + ".join(d for d, v in entries),
             })
 
-    for name in results:
-        entry = results[name]
-        value = entry['account'].balance()
-        entry['balance'] = value
     rulment_history = (results['rulment']['account'].history
                        if 'rulment' in results else [])
     rulment_history.sort(key=lambda e: (e['date'], e['description']))
@@ -112,7 +108,8 @@ def compute(history):
         else:
             uneaten -= item['qty'] * item['per_eat']
 
-    results['uneaten'] = {'balance': uneaten}
+    results['uneaten'] = {'account': Account()}
+    results['uneaten']['account'].add(None, uneaten, "uneaten")
 
     return {
         'results': dict(results),

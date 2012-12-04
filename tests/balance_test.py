@@ -33,7 +33,7 @@ class BalanceTest(unittest.TestCase):
             }
         }
         results = compute(history)['results']
-        self.assertEqual(results['anton']['balance'], D('22.15'))
+        self.assertEqual(results['anton']['account'].balance(), D('22.15'))
 
     def test_compute_sum_of_consumptions(self):
         from balance import compute
@@ -54,7 +54,7 @@ class BalanceTest(unittest.TestCase):
             }
         }
         results = compute(history)['results']
-        self.assertEqual(results['anton']['balance'], D('-26.92'))
+        self.assertEqual(results['anton']['account'].balance(), D('-26.92'))
 
     def test_compute_saves_personal_history_entries(self):
         from balance import compute
@@ -126,7 +126,7 @@ class BalanceTest(unittest.TestCase):
             },
         }
         results = compute(history)['results']
-        self.assertEqual(results['anton']['balance'], D('-8.40'))
+        self.assertEqual(results['anton']['account'].balance(), D('-8.40'))
 
     def test_fee_total_is_increased_with_contribution(self):
         from balance import compute
@@ -142,7 +142,7 @@ class BalanceTest(unittest.TestCase):
             },
         }
         results = compute(history)['results']
-        self.assertEqual(results['rulment']['balance'], D('0.80'))
+        self.assertEqual(results['rulment']['account'].balance(), D('0.80'))
 
     def test_tip_is_deduced_from_rulment(self):
         from balance import compute
@@ -155,7 +155,7 @@ class BalanceTest(unittest.TestCase):
             },
         }
         results = compute(history)['results']
-        self.assertEqual(results['rulment']['balance'], D('-2.00'))
+        self.assertEqual(results['rulment']['account'].balance(), D('-2.00'))
 
     def test_losses_are_deduced_from_regie(self):
         from balance import compute
@@ -170,7 +170,7 @@ class BalanceTest(unittest.TestCase):
             },
         }
         results = compute(history)['results']
-        self.assertEqual(results['rulment']['balance'], D('-11.00'))
+        self.assertEqual(results['rulment']['account'].balance(), D('-11.00'))
 
     def test_regie_history_contains_additions_and_subtractions(self):
         from balance import compute
@@ -234,4 +234,4 @@ class BalanceTest(unittest.TestCase):
             },
         }
         results = compute(history)['results']
-        self.assertEqual(results['uneaten']['balance'], D('-64.00'))
+        self.assertEqual(results['uneaten']['account'].balance(), D('-64.00'))
