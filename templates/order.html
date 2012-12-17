@@ -1,0 +1,29 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+  <h1>Order from {{ date }}</h1>
+
+  <table class="order">
+
+    <thead>
+      <th>Name</th>
+      <th>Qty</th>
+      <th>Price (estimate)</th>
+    </thead>
+
+    <tbody>
+
+    {% for entry in order %}
+      <tr>
+        <td>{{ entry['name'] }}</td>
+        <td>{{ entry['qty'] }}</td>
+        <td>{{ (entry['price'] * (1 + entry['fee']) / entry['qty'])|money }}</td>
+      </tr>
+    {% endfor %}
+
+    </tbody>
+
+  </table>
+
+{% endblock %}

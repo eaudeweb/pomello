@@ -1,6 +1,6 @@
 import os
 import flask
-from datetime import date
+from datetime import date, datetime
 import yaml
 import jinja2
 import balance
@@ -27,6 +27,16 @@ def person(name):
         'name': name,
         'history': sorted(accounts[name].history,
                           key=lambda h: h['date'] or date(2000, 1, 1)),
+    })
+
+
+@views.route('/order/<string:order_date_str>')
+def order(order_date_str):
+    data = _get_balance()
+    order_date = datetime.strptime(order_date_str, '%Y-%m-%d').date()
+    return flask.render_template('order.html', **{
+        'date': order_date,
+        'order': data['orders'][order_date],
     })
 
 
