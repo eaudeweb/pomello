@@ -3,15 +3,18 @@ from datetime import date
 from decimal import Decimal as D
 
 
+def compute(history):
+    from balance import compute
+    return compute(history)
+
+
 class BalanceTest(unittest.TestCase):
 
     def test_empty_history_returns_empty_result(self):
-        from balance import compute
         accounts = compute({})['accounts']
         self.assertEqual(accounts.keys(), ['uneaten'])
 
     def test_order_with_no_consumption_returns_empty_result(self):
-        from balance import compute
         history = {
             'orders': {
                 date(2012, 11, 23): [
@@ -25,7 +28,6 @@ class BalanceTest(unittest.TestCase):
         self.assertEqual(accounts.keys(), ['uneaten'])
 
     def test_compute_sum_of_contributions(self):
-        from balance import compute
         history = {
             'contributions': {
                 'initial': {'anton': 13},
@@ -36,7 +38,6 @@ class BalanceTest(unittest.TestCase):
         self.assertEqual(accounts['anton'].balance, D('22.15'))
 
     def test_compute_sum_of_consumptions(self):
-        from balance import compute
         history = {
             'orders': {
                 date(2012, 11, 20): [
@@ -57,7 +58,6 @@ class BalanceTest(unittest.TestCase):
         self.assertEqual(accounts['anton'].balance, D('-26.92'))
 
     def test_compute_saves_personal_history_entries(self):
-        from balance import compute
         history = {
             'contributions': {
                 'initial': {'anton': 13},
@@ -86,7 +86,6 @@ class BalanceTest(unittest.TestCase):
         ])
 
     def test_compute_joins_history_items_from_same_order(self):
-        from balance import compute
         history = {
             'orders': {
                 date(2012, 11, 23): [
@@ -113,7 +112,6 @@ class BalanceTest(unittest.TestCase):
         ])
 
     def test_fee_is_added_to_spending(self):
-        from balance import compute
         history = {
             'orders': {
                 date(2012, 11, 23): [
@@ -129,7 +127,6 @@ class BalanceTest(unittest.TestCase):
         self.assertEqual(accounts['anton'].balance, D('-8.40'))
 
     def test_fee_total_is_increased_with_contribution(self):
-        from balance import compute
         history = {
             'orders': {
                 date(2012, 11, 23): [
@@ -145,7 +142,6 @@ class BalanceTest(unittest.TestCase):
         self.assertEqual(accounts['rulment'].balance, D('0.80'))
 
     def test_tip_is_deduced_from_rulment(self):
-        from balance import compute
         history = {
             'orders': {
                 date(2012, 11, 23): [
@@ -158,7 +154,6 @@ class BalanceTest(unittest.TestCase):
         self.assertEqual(accounts['rulment'].balance, D('-2.00'))
 
     def test_losses_are_deduced_from_regie(self):
-        from balance import compute
         history = {
             'orders': {
                 date(2012, 11, 23): [
@@ -173,7 +168,6 @@ class BalanceTest(unittest.TestCase):
         self.assertEqual(accounts['rulment'].balance, D('-11.00'))
 
     def test_regie_history_contains_additions_and_subtractions(self):
-        from balance import compute
         history = {
             'orders': {
                 date(2012, 11, 23): [
@@ -202,7 +196,6 @@ class BalanceTest(unittest.TestCase):
         ])
 
     def test_complain_if_comsumption_does_not_add_up(self):
-        from balance import compute
         history = {
             'orders': {
                 date(2012, 11, 23): [
@@ -221,7 +214,6 @@ class BalanceTest(unittest.TestCase):
                          e.exception.message)
 
     def test_computes_sum_of_uneaten_food(self):
-        from balance import compute
         history = {
             'orders': {
                 date(2012, 11, 23): [
