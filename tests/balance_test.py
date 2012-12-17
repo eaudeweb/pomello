@@ -254,3 +254,13 @@ class BalanceTest(unittest.TestCase):
         self.assertDictContainsSubset(
             {'name': 'shrimps', 'price': 50, 'qty': 10},
             orders[NOV23][0])
+
+    def test_tip_is_removed_from_order(self):
+        NOV23 = date(2012, 11, 23)
+        NOV25 = date(2012, 11, 25)
+        history = {
+            'orders': {
+                NOV23: [{'type': 'tip', 'value': 5},
+                        {'name': 'shrimps', 'price': 50, 'qty': 10}]}}
+        orders = compute(history)['orders']
+        self.assertEqual(len(orders[NOV23]), 1)
