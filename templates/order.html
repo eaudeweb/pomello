@@ -9,6 +9,7 @@
     <thead>
       <th>Name</th>
       <th>Qty</th>
+      <th>Remaining</th>
       <th>Price (estimate)</th>
     </thead>
 
@@ -18,6 +19,7 @@
       <tr>
         <td>{{ entry['name'] }}</td>
         <td>{{ entry['qty'] }}</td>
+        <td>{{ entry['remaining'] }}</td>
         <td>{{ (entry['price'] * (1 + entry['fee']) / entry['qty'])|money }}</td>
       </tr>
     {% endfor %}
