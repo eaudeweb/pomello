@@ -257,10 +257,22 @@ class BalanceTest(unittest.TestCase):
 
     def test_tip_is_removed_from_order(self):
         NOV23 = date(2012, 11, 23)
-        NOV25 = date(2012, 11, 25)
         history = {
             'orders': {
                 NOV23: [{'type': 'tip', 'value': 5},
                         {'name': 'shrimps', 'price': 50, 'qty': 10}]}}
         orders = compute(history)['orders']
         self.assertEqual(len(orders[NOV23]), 1)
+
+    def test_order_items_have_remaining_quantity(self):
+        NOV23 = date(2012, 11, 23)
+        history = {
+            'orders': {
+                NOV23: [{
+                    'name': 'shrimps',
+                    'price': 50,
+                    'qty': 10,
+                    'eat': {NOV23: {'anton': 2}},
+                }]}}
+        orders = compute(history)['orders']
+        self.assertEqual(orders[NOV23][0]['remaining'], 8)

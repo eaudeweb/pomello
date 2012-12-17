@@ -59,6 +59,7 @@ def compute(history):
                 })
                 continue
             per_eat = (D(order['price']) / D(order['qty'])).quantize(QUANT)
+            order['remaining'] = order['qty']
             order_remaining = {
                 'date': day_of_order,
                 'name': order['name'],
@@ -93,6 +94,7 @@ def compute(history):
                         description += u" (x%s)" % pieces
                     consumption[eat_date, name].append((description, value))
                     order_remaining['qty'] -= pieces
+                    order['remaining'] -= pieces
         for ((eat_date, name), entries) in sorted(consumption.items()):
             accounts[name].add(**{
                 'date': eat_date,
