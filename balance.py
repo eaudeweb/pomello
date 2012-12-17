@@ -10,9 +10,10 @@ class Account(object):
     def __init__(self):
         self.history = []
 
-    def add(self, date, value, description):
+    def add(self, date, value, description, order_date=None):
         self.history.append({
             'date': date,
+            'order_date': order_date,
             'value': value,
             'description': description,
         })
@@ -52,6 +53,7 @@ def compute(history):
                 value = -D(order['value']).quantize(QUANT)
                 accounts['rulment'].add(**{
                     'date': day_of_order,
+                    'order_date': day_of_order,
                     'value': value,
                     'description': u"tip",
                 })
@@ -70,6 +72,7 @@ def compute(history):
                     value = -day_eats * per_eat
                     accounts['rulment'].add(**{
                         'date': day_of_order,
+                        'order_date': day_of_order,
                         'value': value,
                         'description': u"trashed",
                     })
@@ -81,6 +84,7 @@ def compute(history):
                         fee_value = pieces * fee
                         accounts['rulment'].add(**{
                             'date': eat_date,
+                            'order_date': day_of_order,
                             'value': fee_value,
                             'description': u"contribution " + name,
                         })
@@ -92,6 +96,7 @@ def compute(history):
         for ((eat_date, name), entries) in sorted(consumption.items()):
             accounts[name].add(**{
                 'date': eat_date,
+                'order_date': day_of_order,
                 'value': sum(v for d, v in entries).quantize(QUANT),
                 'description': u" + ".join(d for d, v in entries),
             })

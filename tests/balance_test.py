@@ -76,12 +76,15 @@ class BalanceTest(unittest.TestCase):
         self.assertEqual(accounts['anton'].history, [
             {'description': 'initial',
              'date': None,
+             'order_date': None,
              'value': D('13.00')},
             {'description': 'input',
              'date': date(2012, 11, 23),
+             'order_date': None,
              'value': D('9.15')},
             {'description': 'shrimps (x2)',
              'date': date(2012, 11, 25),
+             'order_date': date(2012, 11, 23),
              'value': D('-21.42')},
         ])
 
@@ -105,9 +108,11 @@ class BalanceTest(unittest.TestCase):
         self.assertEqual(accounts['anton'].history, [
             {'description': 'soup + shrimps (x2)',
              'date': date(2012, 11, 25),
+             'order_date': date(2012, 11, 23),
              'value': D('-31.42')},
             {'description': 'soup',
              'date': date(2012, 11, 26),
+             'order_date': date(2012, 11, 23),
              'value': D('-10.00')},
         ])
 
@@ -186,12 +191,15 @@ class BalanceTest(unittest.TestCase):
         self.assertEqual(accounts['rulment'].history, [
             {'description': u"tip",
              'date': date(2012, 11, 23),
+             'order_date': date(2012, 11, 23),
              'value': D('-2.00')},
             {'description': u"trashed",
              'date': date(2012, 11, 23),
+             'order_date': date(2012, 11, 23),
              'value': D('-16.00')},
             {'description': u"contribution anton",
              'date': date(2012, 11, 25),
+             'order_date': date(2012, 11, 23),
              'value': D('0.80')},
         ])
 
