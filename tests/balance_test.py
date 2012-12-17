@@ -253,7 +253,7 @@ class BalanceTest(unittest.TestCase):
         orders = compute(history)['orders']
         self.assertDictContainsSubset(
             {'name': 'shrimps', 'price': 50, 'qty': 10},
-            orders[NOV23][0])
+            orders[NOV23]['menu'][0])
 
     def test_tip_is_removed_from_order(self):
         NOV23 = date(2012, 11, 23)
@@ -262,7 +262,7 @@ class BalanceTest(unittest.TestCase):
                 NOV23: [{'type': 'tip', 'value': 5},
                         {'name': 'shrimps', 'price': 50, 'qty': 10}]}}
         orders = compute(history)['orders']
-        self.assertEqual(len(orders[NOV23]), 1)
+        self.assertEqual(len(orders[NOV23]['menu']), 1)
 
     def test_order_items_have_remaining_quantity(self):
         NOV23 = date(2012, 11, 23)
@@ -275,4 +275,4 @@ class BalanceTest(unittest.TestCase):
                     'eat': {NOV23: {'anton': 2}},
                 }]}}
         orders = compute(history)['orders']
-        self.assertEqual(orders[NOV23][0]['remaining'], 8)
+        self.assertEqual(orders[NOV23]['menu'][0]['remaining'], 8)

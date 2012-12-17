@@ -121,7 +121,9 @@ def compute(history):
     accounts['uneaten'].add(None, uneaten, "uneaten")
 
     for day in orders:
-        orders[day] = [i for i in orders[day] if i.get('type') != 'tip']
+        orders[day] = {
+            'menu': [i for i in orders[day] if i.get('type') != 'tip'],
+        }
 
     return {
         'accounts': dict(accounts),
