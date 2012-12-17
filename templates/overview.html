@@ -20,4 +20,11 @@
 
   </table>
 
+  <p class="lead">
+    Latest order:
+    {% set latest_order_date = (orders|sort)[-1] %}
+    {% set url = url_for('.order', order_date_str=latest_order_date|string) %}
+    <a href="{{ url }}">{{ latest_order_date }}</a>
+  </p>
+
 {% endblock %}

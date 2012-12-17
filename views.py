@@ -16,8 +16,11 @@ def _get_balance():
 
 @views.route('/')
 def home():
-    accounts = _get_balance()['accounts']
-    return flask.render_template('overview.html', accounts=accounts)
+    balance = _get_balance()
+    return flask.render_template('overview.html', **{
+        'accounts': balance['accounts'],
+        'orders': balance['orders'],
+    })
 
 
 @views.route('/person/<string:name>')
