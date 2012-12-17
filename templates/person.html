@@ -16,8 +16,10 @@
 
     {% for entry in history %}
       <tr>
+        {% set order_url = url_for('.order',
+            order_date_str=entry['order_date']|string) %}
         <td>{{ entry['date'] }}</td>
-        <td>{{ entry['description'] }}</td>
+        <td><a href="{{ order_url }}">{{ entry['description'] }}</a></td>
         <td>{{ entry['value']|money }}</td>
       </tr>
     {% endfor %}
