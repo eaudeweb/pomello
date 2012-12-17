@@ -227,3 +227,22 @@ class BalanceTest(unittest.TestCase):
         }
         accounts = compute(history)['accounts']
         self.assertEqual(accounts['uneaten'].balance, D('-64.00'))
+
+    def test_preserve_list_of_ordered_food(self):
+        NOV23 = date(2012, 11, 23)
+        NOV25 = date(2012, 11, 25)
+        history = {
+            'orders': {
+                NOV23: [
+                    {'name': 'shrimps', 'price': 50, 'qty': 10},
+                    {'name': 'fries', 'price': 20, 'qty': 10},
+                ],
+                NOV25: [
+                    {'name': 'carrots', 'price': 30, 'qty': 10},
+                ],
+            }
+        }
+        orders = compute(history)['orders']
+        self.assertDictContainsSubset(
+            {'name': 'shrimps', 'price': 50, 'qty': 10},
+            orders[NOV23][0])

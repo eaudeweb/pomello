@@ -25,8 +25,10 @@ class Account(object):
 def compute(history):
     accounts = defaultdict(Account)
     remaining = []
+    contributions = history.get('contributions', {})
+    orders = history.get('orders', {})
 
-    for label, day_values in history.get('contributions', {}).items():
+    for label, day_values in contributions.items():
         for name, raw_value in day_values.items():
             value = D(raw_value).quantize(QUANT)
             if label == 'initial':
@@ -42,7 +44,7 @@ def compute(history):
             history_item['value'] = value.quantize(QUANT)
             accounts[name].add(**history_item)
 
-    for day_of_order, day_orders in history.get('orders', {}).items():
+    for day_of_order, day_orders in orders.items():
         consumption = defaultdict(list)
         for order in day_orders:
             order_type = order.get('type', 'food')
@@ -113,4 +115,5 @@ def compute(history):
 
     return {
         'accounts': dict(accounts),
+        'orders': orders,
     }
