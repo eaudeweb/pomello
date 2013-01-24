@@ -6,7 +6,7 @@
 
   <table class="balance">
 
-  {% for name, info in accounts.items() %}
+  {% for name, info in accounts.items()|sort %}
     <tr>
       <th><a href="{{ url_for('.person', name=name) }}">{{ name }}</a></th>
       <td>{{ info.balance|money }}</td>
