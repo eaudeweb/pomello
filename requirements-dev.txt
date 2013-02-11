@@ -1,3 +1,6 @@
 -r requirements.txt
 nose==1.2.1
 honcho==0.1.0
+Fabric==1.5.3
+pycrypto==2.6
+paramiko==1.9.0
